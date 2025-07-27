@@ -2,16 +2,21 @@ trigger:
 - '*'
 
 pool:
-  vmImage: 'ubuntu-20.04'
-  demands:
-  - npm
+  vmImage: 'ubuntu-latest'  # Updated to current LTS image
 
 variables:
   buildConfiguration: 'Release'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '6.x'
+  nodeVersion: '18.x'       # Add Node.js version variable
 
 steps:
+# Install Node.js first
+- task: NodeTool@0
+  displayName: 'Install Node.js $(nodeVersion)'
+  inputs:
+    versionSpec: '$(nodeVersion)'
+
 - task: UseDotNet@2
   displayName: 'Use .NET SDK $(dotnetSdkVersion)'
   inputs:
