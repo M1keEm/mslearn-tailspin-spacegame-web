@@ -7,7 +7,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
-  dotnetSdkVersion: '6.x'
+  dotnetSdkVersion: '9.x'
   nodeVersion: '18.x'       # Add Node.js version variable
 
 steps:
