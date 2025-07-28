@@ -2,21 +2,16 @@ trigger:
 - '*'
 
 pool:
-  vmImage: 'ubuntu-latest'  # Updated to current LTS image
+  vmImage: 'ubuntu-20.04'
+  demands:
+  - npm
 
 variables:
   buildConfiguration: 'Release'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
-  dotnetSdkVersion: '9.x'
-  nodeVersion: '18.x'       # Add Node.js version variable
+  dotnetSdkVersion: '6.x'
 
 steps:
-# Install Node.js first
-- task: NodeTool@0
-  displayName: 'Install Node.js $(nodeVersion)'
-  inputs:
-    versionSpec: '$(nodeVersion)'
-
 - task: UseDotNet@2
   displayName: 'Use .NET SDK $(dotnetSdkVersion)'
   inputs:
@@ -49,6 +44,14 @@ steps:
     command: 'build'
     arguments: '--no-restore --configuration $(buildConfiguration)'
     projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run unit tests - $(buildConfiguration)'
+  inputs:
+    command: 'test'
+    arguments: '--no-build --configuration $(buildConfiguration)'
+    publishTestResults: true
+    projects: '**/*.Tests.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - $(buildConfiguration)'
